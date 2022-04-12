@@ -38,32 +38,32 @@ public class Api {
 		accounts.add(new Account("AccId10", 10L, "CustId104", 0.0, new Date(), AccountStatus.NEW));
 	}
 
-	@GetMapping(path = "/accountNumber/{accountNumber}")
+	@GetMapping(path = "/accounts/accountNumber/{accountNumber}")
 	public Account findByAccountNumber(@PathVariable("accountNumber") Long accountNumber)
 			throws AccountNotFoundException {
 		return accounts.stream().filter(account -> account.getAccountNumber().equals(accountNumber)).findFirst()
 				.orElseThrow(() -> new AccountNotFoundException("Account Number: " + accountNumber));
 	}
 
-	@GetMapping(path = "/accountId/{accountId}")
+	@GetMapping(path = "/accounts/accountId/{accountId}")
 	public Account findByAccountId(@PathVariable("accountId") String accountId) throws AccountNotFoundException {
 		return accounts.stream().filter(account -> account.getAccountId().equals(accountId)).findFirst()
 				.orElseThrow(() -> new AccountNotFoundException("Account Id: " + accountId));
 	}
 
-	@GetMapping(path = "/customerId/{customerId}")
+	@GetMapping(path = "/accounts/customerId/{customerId}")
 	public List<Account> findByCustomerId(@PathVariable("customerId") String customerId) {
 		return accounts.stream().filter(account -> account.getCustomerId().equals(customerId))
 				.collect(Collectors.toList());
 
 	}
 
-	@GetMapping(path = "")
+	@GetMapping(path = "/accounts")
 	public List<Account> getAllAccount() {
 		return accounts;
 	}
 
-	@PostMapping(path = "/createNewAccount")
+	@PostMapping(path = "/accounts/createNewAccount")
 	public Account createNewAccount(@RequestBody Account account) throws AccountNumberInternalFieldException,
 			AccountIdInternalFieldException, CustomerIdManadatoryFieldException {
 
@@ -100,7 +100,7 @@ public class Api {
 		return account;
 	}
 
-	@DeleteMapping(path="/closeAccount/{accountId}")
+	@DeleteMapping(path="/accounts/closeAccount/{accountId}")
 	public Account closeAccountById(@PathVariable("accountId") String accountId) throws AccountNotFoundException {
 		
 		findByAccountId(accountId).setAccountStatus(AccountStatus.CLOSED);
