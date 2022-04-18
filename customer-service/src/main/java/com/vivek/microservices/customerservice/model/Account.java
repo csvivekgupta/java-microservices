@@ -1,18 +1,15 @@
-package com.vivek.microservices.accountservice.model;
+package com.vivek.microservices.customerservice.model;
 
 import java.util.Date;
 import java.util.Objects;
 
-import com.vivek.microservices.accountservice.enums.AccountStatus;
-
 public class Account {
-
 	private String accountId;
 	private Long accountNumber;
 	private String customerId;
 	private Double amount;
 	private Date accountStartDate;
-	private AccountStatus accountStatus;
+	private String accountStatus;
 	private String applicationPort;
 
 	public Account() {
@@ -28,7 +25,7 @@ public class Account {
 	 * @param accountStatus
 	 */
 	public Account(String accountId, Long accountNumber, String customerId, Double amount, Date accountStartDate,
-			AccountStatus accountStatus) {
+			String accountStatus) {
 		super();
 		this.accountId = accountId;
 		this.accountNumber = accountNumber;
@@ -111,14 +108,14 @@ public class Account {
 	/**
 	 * @return the accountStatus
 	 */
-	public AccountStatus getAccountStatus() {
+	public String getAccountStatus() {
 		return accountStatus;
 	}
 
 	/**
 	 * @param accountStatus the accountStatus to set
 	 */
-	public void setAccountStatus(AccountStatus accountStatus) {
+	public void setAccountStatus(String accountStatus) {
 		this.accountStatus = accountStatus;
 	}
 
@@ -151,13 +148,6 @@ public class Account {
 		return Objects.equals(accountId, other.accountId) && Objects.equals(accountNumber, other.accountNumber)
 				&& Objects.equals(accountStartDate, other.accountStartDate) && accountStatus == other.accountStatus
 				&& Objects.equals(amount, other.amount) && Objects.equals(customerId, other.customerId);
-	}
-
-	@Override
-	public String toString() {
-		return String.format(
-				"Account [accountId=%s, accountNumber=%s, customerId=%s, amount=%s, accountStartDate=%s, accountStatus=%s, applicationName=%s, applicationPort=%s]",
-				accountId, accountNumber, customerId, amount, accountStartDate, accountStatus, applicationPort);
 	}
 
 }

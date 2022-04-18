@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,9 @@ public class Api {
 
 	List<Account> accounts;
 
+	@Value("${server.port}")
+	private String serverPort;
+
 	public Api() {
 		accounts = new ArrayList<>();
 		accounts.add(new Account("AccId1", 1L, "CustId101", 0.0, new Date(), AccountStatus.NEW));
@@ -38,34 +42,40 @@ public class Api {
 		accounts.add(new Account("AccId10", 10L, "CustId104", 0.0, new Date(), AccountStatus.NEW));
 	}
 
-	@GetMapping(path = "/accountNumber/{accountNumber}")
+	@GetMapping(path = "/accounts/accountNumber/{accountNumber}")
 	public Account findByAccountNumber(@PathVariable("accountNumber") Long accountNumber)
 			throws AccountNotFoundException {
+		populateServerPort();
 		return accounts.stream().filter(account -> account.getAccountNumber().equals(accountNumber)).findFirst()
 				.orElseThrow(() -> new AccountNotFoundException("Account Number: " + accountNumber));
 	}
 
-	@GetMapping(path = "/accountId/{accountId}")
+	@GetMapping(path = "/accounts/accountId/{accountId}")
 	public Account findByAccountId(@PathVariable("accountId") String accountId) throws AccountNotFoundException {
+		populateServerPort();
 		return accounts.stream().filter(account -> account.getAccountId().equals(accountId)).findFirst()
 				.orElseThrow(() -> new AccountNotFoundException("Account Id: " + accountId));
 	}
 
-	@GetMapping(path = "/customerId/{customerId}")
+	@GetMapping(path = "/accounts/customerId/{customerId}")
 	public List<Account> findByCustomerId(@PathVariable("customerId") String customerId) {
+		populateServerPort();
 		return accounts.stream().filter(account -> account.getCustomerId().equals(customerId))
 				.collect(Collectors.toList());
 
 	}
 
-	@GetMapping(path = "")
+	@GetMapping(path = "/accounts")
 	public List<Account> getAllAccount() {
+		populateServerPort();
 		return accounts;
 	}
 
-	@PostMapping(path = "/createNewAccount")
+	@PostMapping(path = "/accounts/createNewAccount")
 	public Account createNewAccount(@RequestBody Account account) throws AccountNumberInternalFieldException,
 			AccountIdInternalFieldException, CustomerIdManadatoryFieldException {
+
+		populateServerPort();
 
 		if (account.getCustomerId() == null) {
 			throw new CustomerIdManadatoryFieldException();
@@ -100,12 +110,21 @@ public class Api {
 		return account;
 	}
 
-	@DeleteMapping(path="/closeAccount/{accountId}")
+	@DeleteMapping(path = "/accounts/closeAccount/{accountId}")
 	public Account closeAccountById(@PathVariable("accountId") String accountId) throws AccountNotFoundException {
-		
+
+		populateServerPort();
 		findByAccountId(accountId).setAccountStatus(AccountStatus.CLOSED);
-		
+
 		return findByAccountId(accountId);
+	}
+
+	public void populateServerPort() {
+		accounts.stream().forEach(account -> {
+			if (account.getApplicationPort() == null) {
+				account.setApplicationPort(serverPort);
+			}
+		});
 	}
 
 }
