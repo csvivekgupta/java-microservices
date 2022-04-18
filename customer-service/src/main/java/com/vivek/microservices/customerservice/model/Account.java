@@ -10,6 +10,7 @@ public class Account {
 	private Double amount;
 	private Date accountStartDate;
 	private String accountStatus;
+	private String applicationPort;
 
 	public Account() {
 
@@ -116,6 +117,20 @@ public class Account {
 	 */
 	public void setAccountStatus(String accountStatus) {
 		this.accountStatus = accountStatus;
+	}
+
+	/**
+	 * @return the applicationPort
+	 */
+	public String getApplicationPort() {
+		return applicationPort;
+	}
+
+	/**
+	 * @param applicationPort the applicationPort to set
+	 */
+	public void setApplicationPort(String applicationPort) {
+		this.applicationPort = applicationPort;
 	}
 
 	@Override

@@ -8,12 +8,13 @@ import com.vivek.microservices.customerservice.enums.CustomerType;
 
 public class Customer {
 
-	String customerId;
-	String uid;
-	String name;
-	CustomerType customerType;
-	CustomerStatus customerStatus;
-	List<Account> accounts;
+	private String customerId;
+	private String uid;
+	private String name;
+	private CustomerType customerType;
+	private CustomerStatus customerStatus;
+	private List<Account> accounts;
+	private String applicationPort;
 
 	public Customer() {
 
@@ -117,6 +118,20 @@ public class Customer {
 	 */
 	public void setAccounts(List<Account> accounts) {
 		this.accounts = accounts;
+	}
+
+	/**
+	 * @return the applicationPort
+	 */
+	public String getApplicationPort() {
+		return applicationPort;
+	}
+
+	/**
+	 * @param applicationPort the applicationPort to set
+	 */
+	public void setApplicationPort(String applicationPort) {
+		this.applicationPort = applicationPort;
 	}
 
 	@Override

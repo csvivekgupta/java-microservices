@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,9 @@ public class Api {
 	AccountService accountService;
 
 	List<Customer> customers;
+
+	@Value("${server.port}")
+	private String serverPort;
 
 	public Api() {
 		customers = new ArrayList<>();
@@ -46,6 +50,7 @@ public class Api {
 				.orElseThrow(() -> new CustomerNotFoundException("uid:" + uid));
 		cust.setAccounts(accountService.getAccounts(cust.getCustomerId()));
 
+		populateServerPort();
 		return cust;
 	}
 
@@ -54,6 +59,7 @@ public class Api {
 		customers.stream()
 				.forEach(customer -> customer.setAccounts(accountService.getAccounts(customer.getCustomerId())));
 
+		populateServerPort();
 		return customers;
 	}
 
@@ -64,6 +70,8 @@ public class Api {
 				.orElseThrow(() -> new CustomerNotFoundException("CustomerId:" + custId));
 
 		cust.setAccounts(accountService.getAccounts(cust.getCustomerId()));
+
+		populateServerPort();
 
 		return cust;
 	}
@@ -80,11 +88,15 @@ public class Api {
 			customer.setCustomerType(CustomerType.INDIVIDUAL);
 		}
 		customers.add(customer);
+
+		populateServerPort();
+
 		return customer;
 	}
 
 	@DeleteMapping(path = "/customers/deleteCustomer/{customerId}")
 	public Customer removeCustomer(@PathVariable("customerId") String customerId) throws CustomerNotFoundException {
+
 		Customer customer = findByCustId(customerId);
 
 		// first close any associated account
@@ -95,7 +107,17 @@ public class Api {
 
 		customer.setCustomerStatus(CustomerStatus.DELETED);
 
+		customer.setApplicationPort(serverPort);
+
 		return customer;
+	}
+
+	public void populateServerPort() {
+		customers.stream().forEach(customer -> {
+			if (customer.getApplicationPort() == null) {
+				customer.setApplicationPort(serverPort);
+			}
+		});
 	}
 
 }

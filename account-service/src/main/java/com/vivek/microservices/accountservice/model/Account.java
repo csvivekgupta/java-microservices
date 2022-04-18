@@ -6,12 +6,14 @@ import java.util.Objects;
 import com.vivek.microservices.accountservice.enums.AccountStatus;
 
 public class Account {
+
 	private String accountId;
 	private Long accountNumber;
 	private String customerId;
 	private Double amount;
 	private Date accountStartDate;
 	private AccountStatus accountStatus;
+	private String applicationPort;
 
 	public Account() {
 
@@ -120,6 +122,20 @@ public class Account {
 		this.accountStatus = accountStatus;
 	}
 
+	/**
+	 * @return the applicationPort
+	 */
+	public String getApplicationPort() {
+		return applicationPort;
+	}
+
+	/**
+	 * @param applicationPort the applicationPort to set
+	 */
+	public void setApplicationPort(String applicationPort) {
+		this.applicationPort = applicationPort;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(accountId, accountNumber, accountStartDate, accountStatus, amount, customerId);
@@ -135,6 +151,13 @@ public class Account {
 		return Objects.equals(accountId, other.accountId) && Objects.equals(accountNumber, other.accountNumber)
 				&& Objects.equals(accountStartDate, other.accountStartDate) && accountStatus == other.accountStatus
 				&& Objects.equals(amount, other.amount) && Objects.equals(customerId, other.customerId);
+	}
+
+	@Override
+	public String toString() {
+		return String.format(
+				"Account [accountId=%s, accountNumber=%s, customerId=%s, amount=%s, accountStartDate=%s, accountStatus=%s, applicationName=%s, applicationPort=%s]",
+				accountId, accountNumber, customerId, amount, accountStartDate, accountStatus, applicationPort);
 	}
 
 }
