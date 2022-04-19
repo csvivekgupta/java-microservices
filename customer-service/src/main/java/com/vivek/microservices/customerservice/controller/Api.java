@@ -54,7 +54,7 @@ public class Api {
 		return cust;
 	}
 
-	@GetMapping(path = "")
+	@GetMapping(path = "/customers")
 	public List<Customer> findAll() {
 		customers.stream()
 				.forEach(customer -> customer.setAccounts(accountService.getAccounts(customer.getCustomerId())));
