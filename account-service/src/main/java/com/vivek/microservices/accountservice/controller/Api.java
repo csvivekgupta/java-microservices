@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,8 @@ import com.vivek.microservices.accountservice.model.Account;
 
 @RestController
 public class Api {
+	
+	protected static Logger logger = LoggerFactory.getLogger(Api.class.getName());
 
 	List<Account> accounts;
 
@@ -68,6 +72,8 @@ public class Api {
 	@GetMapping(path = "/accounts")
 	public List<Account> getAllAccount() {
 		populateServerPort();
+		logger.info("Account.findAll()");
+		logger.info(String.format("Account.findAll: %s", accounts));
 		return accounts;
 	}
 
